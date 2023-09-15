@@ -18,8 +18,11 @@
       </div>
     </div> -->
 
+    <!-- @click="handleDetailEntry(scope.row.id)"  -->
     <div class="goods">
-      <div class="data-box" @click="handlDetail()" v-for="(item, index) in 6">
+      <div class="data-box" 
+      @click="handlDetail()"
+      v-for="(item, index) in 6">
         <img class="img" src="./image/img.jpg" alt="">
         <div class="text">
           <div class="title">hutb-电力数据集{{ index }}</div>
@@ -37,7 +40,7 @@
 
     <div class="block">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page.sync="currentPage" :page-size="100" layout="total, prev, pager, next" :total="1000">
+        :current-page="page.pageCurrent" :page-size="page.pageSize" layout="total, prev, pager, next, jumper" :total="page.pageTotal">
       </el-pagination>
     </div>
     <div class="footer"></div>
@@ -46,6 +49,8 @@
 </template>
 
 <script>
+import { MarketList } from '@api/market'
+
 
 export default {
   components: {
@@ -53,14 +58,43 @@ export default {
   },
   data() {
     return {
-      currentPage: 1
+      table: [],
+      page: {
+        pageCurrent: 1,
+        pageSize: 6,
+        pageTotal: 30
+      }
     }
 
   },
+  mounted() {
+    this.initList()
+  },
 
   methods: {
+    initList (form) {
+      MarketList({
+        ...form,
+        ...this.page
+      })
+        .then(res => {
+          this.table = res.list
+          this.page.pageTotal = res.total
+        })
+        .catch(err => {
+          console.log('err', err)
+        })
+    },
     handlDetail() {
       this.$router.push({ path: '/detail' })
+    },
+    handleDetailEntry (val) {
+      this.$router.push({
+        path: '/detail',
+        params: {
+          id: val
+        }
+      })
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

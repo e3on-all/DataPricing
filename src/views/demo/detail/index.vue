@@ -83,6 +83,8 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 echarts.use([GridComponent, LineChart, CanvasRenderer, UniversalTransition]);
 
+import { MarketDataDetail } from '@api/market'
+
 export default {
   name: 'detail',
   data() {
@@ -91,12 +93,33 @@ export default {
       sub: ["10.00", "CC0: Public Domain", "Annually"],
       use: ["使用次数", "购买"],
       options: {},
+      detail:[],
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    const id = to.query.id
+    if (id) {
+      next(instance => {
+        instance.getDetail(id)
+      })
+    } else {
+      next(new Error('未指定ID'))
     }
   },
   mounted() {
     this.initEcharts()
   },
   methods: {
+    getDetail (id) {
+      MarketDataDetail(id).then((response) => {
+        this.detail = response
+      }).catch((error) => {
+        console.log(error)
+        this.$message.error('failed')
+      })
+    },
+
+    
     initEcharts() {
       const chartBox = echarts.init(document.getElementById("echart"))
       const option = {
