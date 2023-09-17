@@ -22,16 +22,17 @@
     <div class="goods">
       <div class="data-box" 
       @click="handlDetail()"
-      v-for="(item, index) in 6">
-        <img class="img" src="./image/img.jpg" alt="">
+      v-for="(item, index) in table">
+        <img class="img" :src="item.img" alt="">
         <div class="text">
-          <div class="title">hutb-电力数据集{{ index }}</div>
+          <div class="title">{{ item.title }}</div>
           <div class="des">
-            电力数据集简介：收集了来自长沙市xxx小区的xxx户电力信息，同时包含了来自长沙气象站的气象数据
+            数据集简介：{{ item.des }}
+
           </div>
           <div class="btn">
           <el-button type="primary">详情</el-button>
-          <el-button>$11.1/h</el-button>
+          <el-button>¥11.1/h</el-button>
         </div>
         </div>
        
@@ -58,7 +59,14 @@ export default {
   },
   data() {
     return {
-      table: [],
+      table: [
+        {title:"个人信贷数据",des:"中国银行",img:require("./image/1.jpg")},
+        {title:"企业信贷数据",des:"中国银行",img:require("./image/2.jpg")},
+        {title:"个人身份信息",des:"中国联通",img:require("./image/3.jpg")},
+        {title:"黑名单数据",des:"中国移动",img:require("./image/4.jpg")},
+        {title:"高危账号数据 ",des:"中国移动",img:require("./image/5.jpg")},
+        {title:"失信名单数据",des:"中国银联",img:require("./image/6.jpg")},
+    ],
       page: {
         pageCurrent: 1,
         pageSize: 6,
@@ -225,7 +233,7 @@ export default {
         }
 
         .des {
-          margin: 10px auto;
+          margin: 20px auto;
           font-size: 12px;
           color: #999999;
         }
