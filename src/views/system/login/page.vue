@@ -23,7 +23,7 @@
           class="page-login--content-main"
           flex="dir:top main:center cross:center">
           <!-- logo -->
-          <img class="page-login--logo" src="./image/logo@2x.png">
+          <!-- <img class="page-login--logo" src="./image/logo@2x.png"> -->
           <!-- form -->
           <div class="page-login--form">
             <el-card shadow="never">
@@ -75,9 +75,9 @@
               <span>注册用户</span>
             </p>
             <!-- quick login -->
-            <el-button class="page-login--quick" size="default" type="info" @click="dialogVisible = true">
+            <!-- <el-button class="page-login--quick" size="default" type="info" @click="dialogVisible = true">
               快速选择用户（测试功能）
-            </el-button>
+            </el-button> -->
           </div>
         </div>
         <div class="page-login--content-footer">
@@ -137,9 +137,9 @@ export default {
       dialogVisible: false,
       users: [
         {
-          name: 'Admin',
-          username: 'admin',
-          password: 'admin'
+          name: 'root',
+          username: 'root',
+          password: 'root'
         },
         {
           name: 'Editor',
@@ -154,8 +154,8 @@ export default {
       ],
       // 表单
       formLogin: {
-        username: 'admin',
-        password: 'admin',
+        username: 'root',
+        password: 'root',
         code: 'v9am'
       },
       // 表单校验
@@ -223,6 +223,7 @@ export default {
             password: this.formLogin.password
           })
             .then(() => {
+              console.log('登录成功，跳转中...')
               // 重定向对象不存在则返回顶层路径
               this.$router.replace(this.$route.query.redirect || '/')
             })

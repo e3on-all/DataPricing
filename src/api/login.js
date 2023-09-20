@@ -2,8 +2,7 @@ import request from '@/plugin/axios'
 
 export function AccountLogin (data) {
   return request({
-    url: process.env.VUE_APP_USER_URL + '/login',
-    // url: '/user/login',
+    url: '/user/login',
     method: 'post',
     data
   })

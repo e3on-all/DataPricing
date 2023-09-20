@@ -4,14 +4,14 @@ export function MarketList (params) {
   const num = params.pageCurrent
   const size = params.pageSize
   return request({
-    url: process.env.VUE_APP_DATA_URL +  '/' + num + '/' + size,
+    url:  '/market/list/' + num + '/' + size,
     method: 'get'
   })
 }
 //数据集详情
 export function MarketDataDetail (id) {
     return request({
-      url: '/data/detail/' + id,
+      url: '/market/detail/' + id,
       method: 'get'
     })
   }
