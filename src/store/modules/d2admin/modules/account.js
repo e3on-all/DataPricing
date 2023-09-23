@@ -30,7 +30,7 @@ export default {
             // token 代表用户当前登录状态 建议在网络请求中携带 token
             // 如有必要 token 需要定时更新，默认保存一天
             console.log(res)
-            // util.cookies.set('uuid', res.id)
+            util.cookies.set('uuid', res.uid)
             util.cookies.set('token', res.token)
             // util.cookies.set('expirationTime', res.token.expirationTime)
             // 设置 vuex 用户信息
@@ -39,8 +39,6 @@ export default {
             }, { root: true })
             // 用户登录后从持久化数据加载一系列的设置
             await dispatch('load')
-            
-
             // 结束
             resolve()
           })

@@ -5,16 +5,16 @@
       <el-row :gutter="20">
         <el-col :span="16">
           <div class="left">
-            <h1>{{ detail.title }}</h1>
-            <div class="des">{{ detail.des1 }}</div>
+            <h1>{{ table.dataName }}</h1>
+            <div class="des">{{ table.abstracts }}</div>
             <div class="score">
-              <div class="number">{{ detail.score }}</div>
+              <div class="number">{{ table.score }}</div>
               <div class="fen">分</div>
             </div>
           </div>
         </el-col>
         <el-col :span="8">
-          <img src="./item.png" alt="">
+          <img :src=table.picUrl alt="">
         </el-col>
       </el-row>
     </div>
@@ -24,7 +24,7 @@
         <el-col :span="16">
           <div class="left">
             <h2>关于数据集</h2>
-            <div class="des">{{ detail.des2 }}</div>
+            <div class="des">{{ table.introduce }}</div>
           </div>
         </el-col>
         <el-col :span="8">
@@ -76,8 +76,18 @@ export default {
   name: 'detail',
   data() {
     return {
+      table:{
+        abstracts:'',
+        dataName:'',
+        introduce:'',
+        license:'',
+        ownUser:'',
+        picUrl:'',
+        price:''
+      },
+
       list: ["价格", "License", "Expected update frequency"],
-      sub: ["10.00", "CC0: Public Domain", "Annually"],
+      sub: [table.price, table.license, "Annually"],
       use: ["使用次数", "购买"],
       options: {},
       detail:{
@@ -88,23 +98,36 @@ export default {
     },
     }
   },
-  // beforeRouteEnter (to, from, next) {
-  //   const id = to.query.id
-  //   if (id) {
-  //     next(instance => {
-  //       instance.getDetail(id)
-  //     })
-  //   } else {
-  //     next(new Error('未指定ID'))
-  //   }
-  // },
+   // 第一次进入或从其他组件对应路由进入时触发
+   beforeRouteEnter (to, from, next) {
+    const id = to.params.id
+    console.log(to)
+    console.log(from)
+    if (id) {
+      next(instance => {
+        instance.getDetail(id)
+      })
+    } else {
+      next(new Error('未指定ID'))
+    }
+  },
+  // // 在同一组件对应的多个路由间切换时触发
+  beforeRouteUpdate (to, from, next) {
+    const id = to.params.id
+    if (id) {
+      instance.getDetail(id)
+      next()
+    } else {
+      next(new Error('未指定ID'))
+    }
+  },
   mounted() {
     this.initEcharts()
   },
   methods: {
     getDetail (id) {
       MarketDataDetail(id).then((response) => {
-        this.detail = response
+        this.table = response
       }).catch((error) => {
         console.log(error)
         this.$message.error('failed')

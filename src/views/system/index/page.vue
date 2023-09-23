@@ -18,30 +18,28 @@
       </div>
     </div> -->
 
-    <!-- @click="handleDetailEntry(scope.row.id)"  -->
     <div class="goods">
-      <div class="data-box" 
-      @click="handlDetail()"
-      v-for="(item, index) in table">
-        <img class="img" :src="item.img" alt="">
+      <div class="data-box" @click="handleDetailEntry(item.dataId)" v-for="(item, index) in table">
+        <img class="img" :src="item.picUrl" alt="">
         <div class="text">
-          <div class="title">{{ item.title }}</div>
+          <div class="title">{{ item.dataName }}</div>
           <div class="des">
-            数据集简介：{{ item.des }}
+            {{ item.introduce }}
 
           </div>
           <div class="btn">
-          <el-button type="primary">详情</el-button>
-          <el-button>¥11.1/h</el-button>
+            <el-button type="primary">详情</el-button>
+            <el-button>¥{{ item.price }}/h</el-button>
+          </div>
         </div>
-        </div>
-       
+
       </div>
     </div>
 
     <div class="block">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page="page.pageCurrent" :page-size="page.pageSize" layout="total, prev, pager, next, jumper" :total="page.pageTotal">
+        :current-page="page.pageCurrent" :page-size="page.pageSize" :total="page.pageTotal"
+        layout="total, prev, pager, next, jumper">
       </el-pagination>
     </div>
     <div class="footer"></div>
@@ -59,18 +57,17 @@ export default {
   },
   data() {
     return {
-      table: [
-        {title:"个人信贷数据",des:"中国银行",img:require("./image/1.jpg")},
-        {title:"企业信贷数据",des:"中国银行",img:require("./image/2.jpg")},
-        {title:"个人身份信息",des:"中国联通",img:require("./image/3.jpg")},
-        {title:"黑名单数据",des:"中国移动",img:require("./image/4.jpg")},
-        {title:"高危账号数据 ",des:"中国移动",img:require("./image/5.jpg")},
-        {title:"失信名单数据",des:"中国银联",img:require("./image/6.jpg")},
-    ],
+      table: {
+        dataId: '',
+        dataName: '',
+        introduce: '',
+        picUrl: '',
+        price: '',
+      },
       page: {
         pageCurrent: 1,
         pageSize: 6,
-        pageTotal: 30
+        pageTotal: 0
       }
     }
 
@@ -80,35 +77,35 @@ export default {
   },
 
   methods: {
-    initList (form) {
+    initList() {
       MarketList({
-        ...form,
         ...this.page
       })
         .then(res => {
-          this.table = res.list
+          console.log('res', res)
+          this.table = res.records
           this.page.pageTotal = res.total
         })
         .catch(err => {
           console.log('err', err)
         })
     },
-    handlDetail() {
-      this.$router.push({ path: '/detail' })
-    },
-    handleDetailEntry (val) {
+    // path无法与params一起使用
+    // 因为动态路由也是传递params的，所以在 this.$router.push() 方法中 path不能和params一起使用，
+    // 否则params将无效
+    handleDetailEntry(val) {
       this.$router.push({
-        path: '/detail',
-        params: {
-          id: val
-        }
+        name: 'detail',
+        params: { id: val }
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.page.pageSize = val
+      this.initList()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.page.pageCurrent = val
+      this.initList()
     }
 
   }
@@ -271,4 +268,5 @@ export default {
 
 
 
-}</style>
+}
+</style>

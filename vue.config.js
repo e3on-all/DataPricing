@@ -9,8 +9,8 @@ const { chain, set, each } = require('lodash')
 const resolve = dir => require('path').join(__dirname, dir)
 
 // 增加环境变量
-process.env.VUE_APP_USER_URL = 'http://172.21.198.33:8090'
-process.env.VUE_APP_DATA_URL = 'http://172.21.198.33:8090/market'
+process.env.VUE_APP_USER_URL = 'http://172.21.198.33:11000/test'
+process.env.VUE_APP_DATA_URL = 'http://172.21.198.33:11000/test'
 process.env.VUE_APP_VERSION = require('./package.json').version
 process.env.VUE_APP_BUILD_TIME = require('dayjs')().format('YYYY-M-D HH:mm:ss')
 
@@ -40,12 +40,12 @@ module.exports = {
   lintOnSave: true,
   devServer: {
     proxy:{
-      '/api/user': {
-        target: process.env.VUE_APP_USER_URL,
-        changeOrigin: true,
-        pathRewrite: {'^/api' : ''}
-      },
-      '/maker': {
+      // '/api/user': {
+      //   target: process.env.VUE_APP_USER_URL,
+      //   changeOrigin: true,
+      //   pathRewrite: {'^/api' : ''}
+      // },
+      '/api': {
         target: process.env.VUE_APP_DATA_URL,
         changeOrigin: true,
         pathRewrite: {'^/api' : ''}
