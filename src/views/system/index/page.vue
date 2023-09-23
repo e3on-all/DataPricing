@@ -25,7 +25,6 @@
           <div class="title">{{ item.dataName }}</div>
           <div class="des">
             {{ item.introduce }}
-
           </div>
           <div class="btn">
             <el-button type="primary">详情</el-button>
@@ -50,11 +49,7 @@
 <script>
 import { MarketList } from '@api/market'
 
-
 export default {
-  components: {
-
-  },
   data() {
     return {
       table: {
@@ -70,14 +65,14 @@ export default {
         pageTotal: 0
       }
     }
-
   },
-  mounted() {
+
+  mounted () {
     this.initList()
   },
-
+  
   methods: {
-    initList() {
+    initList () {
       MarketList({
         ...this.page
       })
@@ -93,17 +88,17 @@ export default {
     // path无法与params一起使用
     // 因为动态路由也是传递params的，所以在 this.$router.push() 方法中 path不能和params一起使用，
     // 否则params将无效
-    handleDetailEntry(val) {
+    handleDetailEntry (val) {
       this.$router.push({
         name: 'detail',
         params: { id: val }
       })
     },
-    handleSizeChange(val) {
+    handleSizeChange (val) {
       this.page.pageSize = val
       this.initList()
     },
-    handleCurrentChange(val) {
+    handleCurrentChange (val) {
       this.page.pageCurrent = val
       this.initList()
     }
@@ -126,8 +121,6 @@ export default {
     padding: 20px 140px;
     height: auto;
     box-sizing: border-box;
-
-
     .bg {
       padding: 20px 40px 0 40px;
       box-sizing: border-box;
@@ -176,11 +169,8 @@ export default {
             color: #2f74ff;
             cursor: pointer;
           }
-
         }
       }
-
-
     }
   }
 
@@ -246,13 +236,8 @@ export default {
 
     div.data-box:nth-child(3n) {
       margin-right: 0px;
-
     }
-
-
-
   }
-
   .block {
     width: 100%;
     margin: 10px auto;
@@ -264,9 +249,5 @@ export default {
     height: 200px;
     background-color: #344153;
   }
-
-
-
-
 }
 </style>
