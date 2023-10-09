@@ -4,34 +4,33 @@
       <el-row :gutter="20">
         <el-col :span="4">
           <img class="head" alt="">
-          <div>username</div>
+          <div>root</div>
 
         </el-col>
         <el-col :span="20">
           <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
             <el-tab-pane label="我的数据" name="mine">
-
-              <div class="list" v-for="(item, index) of 4">
+              <div class="list" v-for="(item, index) of userList">
                 <el-row :gutter="20">
                   <el-col :span="4">
-                    <img src="" alt="">
+                    <img :src="item.picUrl" alt="">
                   </el-col>
                   <el-col :span="20">
                     <div class="text">
-                      <div class="title">hutb-电力数据集</div>
-                      <div class="des">电力数据集简介：收集了来自长沙市xxx小区的xxx户电力信息，同时包含了来自长沙气象站的气象数据</div>
+                      <div class="title">{{ item.dataName }}</div>
+                      <div class="des">{{ item.introduce }}</div>
                     </div>
                   </el-col>
                 </el-row>
               </div>
 
               <div class="block">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                  :current-page.sync="currentPage" :page-size="100" layout="total, prev, pager, next" :total="1000">
+                <el-pagination @current-change="handleCurrentChange1" :current-page="page1.pageCurrent"
+                  :page-size="page1.pageSize" :total="page1.pageTotal" layout="total, prev, pager, next">
                 </el-pagination>
               </div>
-
             </el-tab-pane>
+
             <el-tab-pane label="使用历史" name="history">
               <div class="list" v-for="(item, index) of 4">
                 <el-row :gutter="20">
@@ -48,12 +47,11 @@
               </div>
 
               <div class="block">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                  :current-page.sync="currentPage" :page-size="100" layout="total, prev, pager, next" :total="1000">
+                <el-pagination @current-change="handleCurrentChange2" :current-page="page2.pageCurrent"
+                  :page-size="page2.pageSize" :total="page2.pageTotal" layout="total, prev, pager, next">
                 </el-pagination>
               </div>
             </el-tab-pane>
-
           </el-tabs>
         </el-col>
 
@@ -86,23 +84,75 @@
 </template>
 
 <script>
+import util from '@/libs/util.js'
+import { UserData, UserStats } from '@api/user'
 export default {
   name: 'page1',
   data() {
     return {
       activeName: 'mine',
-      currentPage: 1
+      userList: [],
+      data: {},
+      page1: {
+        pageCurrent: 1,
+        pageSize: 4,
+        pageTotal: 0
+      },
+      page2: {
+        pageCurrent: 1,
+        pageSize: 4,
+        pageTotal: 0
+      }
+
+
     };
+  },
+  mounted() {
+    this.getData()
   },
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
+    handleCurrentChange1(val) {
+      this.page1.pageCurrent = val
+      this.getData()
       console.log(`当前页: ${val}`);
+    },
+    handleCurrentChange2(val) {
+      this.page2.pageCurrent = val
+      this.getData()
+      console.log(`当前页: ${val}`);
+    },
+    getData() {
+      const params1 = {
+        ownId: util.cookies.get('ownId'),
+        page: this.page1.pageCurrent,
+        pageSize: this.page1.pageSize
+      }
+      const params2 = {
+        uid: util.cookies.get('uuid'),
+        page: this.page2.pageCurrent,
+        pageSize: this.page2.pageSize
+      }
+      console.log('params2', params2)
+
+      UserData(params1)
+        .then(res => {
+          this.userList = res.records
+          this.page1.pageTotal = res.total
+        })
+        .catch(err => {
+          console.log('err', err)
+        })
+
+      UserStats(params2)
+        .then(res => {
+          this.data = res
+        })
+        .catch(err => {
+          console.log('err', err)
+        })
     }
   }
 };
@@ -150,15 +200,16 @@ export default {
       }
     }
   }
-  .statistics{
+
+  .statistics {
     width: 100%;
     height: auto;
     padding: 20px 100px;
     box-sizing: border-box;
     text-align: center;
 
-    .content{
-      img{
+    .content {
+      img {
         width: 500px;
         height: 250px;
         background-color: #999;
@@ -172,4 +223,15 @@ export default {
     background-color: #344153;
   }
 
-}</style>
+  .el-tabs--card {
+    height: 500px;
+    /* overflow-y: auto; */
+  }
+
+  .el-tab-pane {
+    height: 500px;
+    // overflow-y: auto;
+  }
+
+}
+</style>

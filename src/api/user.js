@@ -1,17 +1,17 @@
 import request from '@/plugin/axios'
 //用户拥有数据集
-export function MarketList (params) {
-  const num = params.pageCurrent
-  const size = params.pageSize
+export function UserData (params) {
   return request({
-    url: process.env.VUE_APP_DATA_URL +  '/' + num + '/' + size,
-    method: 'get'
+    url:  '/user/data',
+    method: 'get',
+    params
   })
 }
 //用户数据集使用情况
-export function MarketDataDetail (id) {
+export function UserStats (params) {
     return request({
-      url: '/data/detail/' + id,
-      method: 'get'
+      url: '/user/stats',
+      method: 'get',
+      params
     })
   }

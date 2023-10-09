@@ -32,6 +32,7 @@ export default {
             console.log(res)
             util.cookies.set('uuid', res.uid)
             util.cookies.set('token', res.token)
+            util.cookies.set('ownId', res.ownId)
             // util.cookies.set('expirationTime', res.token.expirationTime)
             // 设置 vuex 用户信息
             await dispatch('d2admin/user/set', {
@@ -95,6 +96,7 @@ export default {
         // 删除cookie
         util.cookies.remove('token')
         util.cookies.remove('uuid')
+        util.cookies.remove('ownId')
         util.cookies.remove('expirationTime')
         // 清空 vuex 用户信息
         await dispatch('d2admin/user/set', {}, { root: true })
